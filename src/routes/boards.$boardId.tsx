@@ -17,7 +17,7 @@ import {
 } from "reactflow";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, Save, Trash2, Copy, Search } from "lucide-react";
-import { useAppStore, useStoreHydrated, BOARD_TYPE_LABEL, type NodeBlockData } from "@/lib/store";
+import { useAppStore, BOARD_TYPE_LABEL, type NodeBlockData } from "@/lib/store";
 import { BLOCK_CATEGORIES } from "@/lib/blocks";
 import { BlockNode } from "@/components/BlockNode";
 
@@ -48,7 +48,18 @@ function BoardCanvas() {
   const [search, setSearch] = useState("");
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, fitView } = useReactFlow();
+  const initializedRef = useRef<string | null>(null);
+
+  // Initialize graph from store once per board (handles async rehydration).
+  useEffect(() => {
+    if (!board) return;
+    if (initializedRef.current === board.id) return;
+    initializedRef.current = board.id;
+    setNodes(board.nodes);
+    setEdges(board.edges);
+    requestAnimationFrame(() => fitView({ padding: 0.2, duration: 300 }));
+  }, [board, setNodes, setEdges, fitView]);
 
   // Auto-save on changes
   useEffect(() => {
