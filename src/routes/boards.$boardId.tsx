@@ -1,3 +1,4 @@
+import "reactflow/dist/style.css";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ReactFlow,
@@ -28,6 +29,13 @@ export const Route = createFileRoute("/boards/$boardId")({
 const nodeTypes = { block: BlockNode };
 
 function BoardCanvasPage() {
+  if (typeof window === "undefined") {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background text-sm text-muted-foreground">
+        Carregando canvas...
+      </div>
+    );
+  }
   return (
     <ReactFlowProvider>
       <BoardCanvas />
@@ -48,7 +56,18 @@ function BoardCanvas() {
   const [search, setSearch] = useState("");
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, fitView } = useReactFlow();
+  const initializedRef = useRef<string | null>(null);
+
+  // Initialize graph from store once per board (handles async rehydration).
+  useEffect(() => {
+    if (!board) return;
+    if (initializedRef.current === board.id) return;
+    initializedRef.current = board.id;
+    setNodes(board.nodes);
+    setEdges(board.edges);
+    requestAnimationFrame(() => fitView({ padding: 0.2, duration: 300 }));
+  }, [board, setNodes, setEdges, fitView]);
 
   // Auto-save on changes
   useEffect(() => {
