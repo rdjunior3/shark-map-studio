@@ -31,14 +31,14 @@ const BoardsIndexRoute = BoardsIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientsClientIdRoute = ClientsClientIdRouteImport.update({
-  id: '/$clientId',
-  path: '/$clientId',
-  getParentRoute: () => ClientsRoute,
+  id: '/clients/$clientId',
+  path: '/clients/$clientId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BoardsBoardIdRoute = BoardsBoardIdRouteImport.update({
-  id: '/$boardId',
-  path: '/$boardId',
-  getParentRoute: () => BoardsRoute,
+  id: '/boards/$boardId',
+  path: '/boards/$boardId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -84,6 +84,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BoardsBoardIdRoute: typeof BoardsBoardIdRoute
+  ClientsClientIdRoute: typeof ClientsClientIdRoute
   BoardsIndexRoute: typeof BoardsIndexRoute
   ClientsIndexRoute: typeof ClientsIndexRoute
 }
@@ -113,36 +115,28 @@ declare module '@tanstack/react-router' {
     }
     '/clients/$clientId': {
       id: '/clients/$clientId'
-      path: '/$clientId'
+      path: '/clients/$clientId'
       fullPath: '/clients/$clientId'
       preLoaderRoute: typeof ClientsClientIdRouteImport
-      parentRoute: typeof ClientsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/boards/$boardId': {
       id: '/boards/$boardId'
-      path: '/$boardId'
+      path: '/boards/$boardId'
       fullPath: '/boards/$boardId'
       preLoaderRoute: typeof BoardsBoardIdRouteImport
-      parentRoute: typeof BoardsRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BoardsBoardIdRoute: BoardsBoardIdRoute,
+  ClientsClientIdRoute: ClientsClientIdRoute,
   BoardsIndexRoute: BoardsIndexRoute,
   ClientsIndexRoute: ClientsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
