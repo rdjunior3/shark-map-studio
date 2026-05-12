@@ -1,3 +1,4 @@
+import "reactflow/dist/style.css";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ReactFlow,
