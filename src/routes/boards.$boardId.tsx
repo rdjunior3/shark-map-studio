@@ -28,14 +28,6 @@ export const Route = createFileRoute("/boards/$boardId")({
 const nodeTypes = { block: BlockNode };
 
 function BoardCanvasPage() {
-  const hydrated = useStoreHydrated();
-  if (!hydrated) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-background text-sm text-muted-foreground">
-        Carregando board...
-      </div>
-    );
-  }
   return (
     <ReactFlowProvider>
       <BoardCanvas />
