@@ -4,7 +4,7 @@ import { useAppStore } from "@/lib/store";
 import { useState } from "react";
 import { Plus, Trash2, ArrowUpRight } from "lucide-react";
 
-export const Route = createFileRoute("/clients")({
+export const Route = createFileRoute("/clients/")({
   head: () => ({
     meta: [
       { title: "Clientes — Sharks Flow" },

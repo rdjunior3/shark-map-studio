@@ -3,7 +3,7 @@ import { AppShell } from "@/components/AppShell";
 import { useAppStore, BOARD_TYPE_LABEL } from "@/lib/store";
 import { ArrowUpRight } from "lucide-react";
 
-export const Route = createFileRoute("/boards")({
+export const Route = createFileRoute("/boards/")({
   head: () => ({
     meta: [
       { title: "Boards — Sharks Flow" },
