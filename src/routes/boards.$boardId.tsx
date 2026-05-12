@@ -17,7 +17,7 @@ import {
 } from "reactflow";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, Save, Trash2, Copy, Search } from "lucide-react";
-import { useAppStore, BOARD_TYPE_LABEL, type NodeBlockData } from "@/lib/store";
+import { useAppStore, useStoreHydrated, BOARD_TYPE_LABEL, type NodeBlockData } from "@/lib/store";
 import { BLOCK_CATEGORIES } from "@/lib/blocks";
 import { BlockNode } from "@/components/BlockNode";
 
@@ -28,6 +28,14 @@ export const Route = createFileRoute("/boards/$boardId")({
 const nodeTypes = { block: BlockNode };
 
 function BoardCanvasPage() {
+  const hydrated = useStoreHydrated();
+  if (!hydrated) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background text-sm text-muted-foreground">
+        Carregando board...
+      </div>
+    );
+  }
   return (
     <ReactFlowProvider>
       <BoardCanvas />

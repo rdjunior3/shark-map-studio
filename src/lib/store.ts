@@ -170,8 +170,20 @@ export const useAppStore = create<State>()(
 );
 
 // Manual rehydration — avoids SSR/CSR mismatch.
+import { useEffect, useState } from "react";
+
 if (typeof window !== "undefined") {
   void useAppStore.persist.rehydrate();
+}
+
+export function useStoreHydrated() {
+  const [hydrated, setHydrated] = useState(() => useAppStore.persist.hasHydrated());
+  useEffect(() => {
+    const unsub = useAppStore.persist.onFinishHydration(() => setHydrated(true));
+    setHydrated(useAppStore.persist.hasHydrated());
+    return unsub;
+  }, []);
+  return hydrated;
 }
 
 export const BOARD_TYPE_LABEL: Record<BoardType, string> = {
