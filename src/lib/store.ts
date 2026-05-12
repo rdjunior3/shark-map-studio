@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import type { Edge, Node } from "reactflow";
 
 export type BoardType =
@@ -159,9 +159,20 @@ export const useAppStore = create<State>()(
           ),
         }),
     }),
-    { name: "sharks-flow-store" },
+    {
+      name: "sharks-flow-store-v2",
+      storage: createJSONStorage(() =>
+        typeof window !== "undefined" ? window.localStorage : (undefined as unknown as Storage),
+      ),
+      skipHydration: true,
+    },
   ),
 );
+
+// Manual rehydration — avoids SSR/CSR mismatch.
+if (typeof window !== "undefined") {
+  void useAppStore.persist.rehydrate();
+}
 
 export const BOARD_TYPE_LABEL: Record<BoardType, string> = {
   "marketing-funnel": "Funil de Marketing",
