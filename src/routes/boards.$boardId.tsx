@@ -200,27 +200,35 @@ function BoardCanvas() {
       <div className="flex flex-1 overflow-hidden">
         {/* Library */}
         <aside className="flex w-64 flex-col border-r border-border bg-sidebar">
-          <div className="border-b border-border p-3">
+          {/* Search */}
+          <div className="shrink-0 border-b border-border/60 p-3">
             <div className="relative">
-              <Search className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground/60" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Buscar bloco..."
-                className="w-full rounded-lg border border-border bg-input py-1.5 pl-7 pr-2 text-xs outline-none focus:border-primary"
+                className="w-full rounded-xl border border-border/60 bg-background/60 py-2 pl-9 pr-3 text-xs text-foreground outline-none ring-0 transition-all placeholder:text-muted-foreground/40 focus:border-primary/60 focus:bg-background focus:ring-1 focus:ring-primary/20"
               />
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto p-3">
+
+          {/* Scrollable categories */}
+          <div className="library-scroll flex-1 overflow-y-auto px-3 py-4">
             {filteredCategories.map((cat) => (
-              <div key={cat.name} className="mb-5">
-                <div className="mb-2 flex items-center justify-between">
-                  <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              <div key={cat.name} className="mb-6 last:mb-0">
+                {/* Category header */}
+                <div className="mb-3 flex items-center gap-2 px-1">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                     {cat.name}
                   </div>
-                  <div className="text-[10px] text-muted-foreground/70">{cat.items.length}</div>
+                  <div className="ml-auto inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[9px] font-medium text-muted-foreground/80">
+                    {cat.items.length}
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 gap-1.5">
+
+                {/* Items grid */}
+                <div className="grid grid-cols-2 gap-2">
                   {cat.items.map((item) => (
                     <div
                       key={item.label}
@@ -236,18 +244,33 @@ function BoardCanvas() {
                         })
                       }
                       title={item.label}
-                      className="group flex cursor-grab flex-col items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-2 py-2.5 text-[10px] transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_4px_14px_-6px_rgba(96,165,250,0.5)] active:cursor-grabbing"
+                      className="group relative flex cursor-grab flex-col items-center justify-center gap-2 rounded-2xl border border-border/60 bg-card/80 px-3 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] active:cursor-grabbing"
+                      style={{
+                        boxShadow: "0 1px 2px 0 rgba(0,0,0,0.15)",
+                      }}
                     >
+                      {/* Glow backdrop on hover */}
                       <div
-                        className="flex h-7 w-7 items-center justify-center rounded-lg border"
+                        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                         style={{
-                          background: `color-mix(in oklab, ${item.color ?? "#60a5fa"} 14%, var(--card))`,
-                          borderColor: `color-mix(in oklab, ${item.color ?? "#60a5fa"} 35%, transparent)`,
+                          background: `radial-gradient(120px circle at 50% 30%, color-mix(in oklab, ${item.color ?? "#60a5fa"} 18%, transparent), transparent)`,
+                        }}
+                      />
+
+                      {/* Icon container */}
+                      <div
+                        className="relative flex h-10 w-10 items-center justify-center rounded-xl border backdrop-blur-sm transition-transform duration-200 group-hover:scale-110"
+                        style={{
+                          background: `color-mix(in oklab, ${item.color ?? "#60a5fa"} 12%, var(--card))`,
+                          borderColor: `color-mix(in oklab, ${item.color ?? "#60a5fa"} 30%, transparent)`,
+                          boxShadow: `0 0 20px -6px color-mix(in oklab, ${item.color ?? "#60a5fa"} 40%, transparent)`,
                         }}
                       >
-                        <BlockIcon icon={item.icon} lucide={item.lucide} color={item.color ?? "#60a5fa"} size={16} />
+                        <BlockIcon icon={item.icon} lucide={item.lucide} color={item.color ?? "#60a5fa"} size={20} />
                       </div>
-                      <span className="line-clamp-1 text-center text-[10px] text-foreground/90">
+
+                      {/* Label */}
+                      <span className="relative z-10 line-clamp-1 text-center text-[10px] font-medium text-foreground/80 group-hover:text-foreground">
                         {item.label}
                       </span>
                     </div>
@@ -256,8 +279,19 @@ function BoardCanvas() {
               </div>
             ))}
           </div>
-          <div className="border-t border-border p-3 text-[10px] text-muted-foreground">
-            Arraste blocos para o canvas.
+
+          {/* Footer hint */}
+          <div className="shrink-0 border-t border-border/60 p-3">
+            <div className="flex items-center gap-2 rounded-xl bg-muted/40 px-3 py-2">
+              <div className="flex h-5 w-5 items-center justify-center rounded-md bg-primary/10">
+                <svg className="h-3 w-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+                </svg>
+              </div>
+              <span className="text-[10px] leading-snug text-muted-foreground/70">
+                Arraste blocos para o canvas
+              </span>
+            </div>
           </div>
         </aside>
 
