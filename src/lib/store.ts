@@ -37,6 +37,7 @@ export interface NodeBlockData {
   category: string;
   subtype?: string;
   icon?: string;
+  lucide?: string;
   color?: string;
   notes?: string;
 }
