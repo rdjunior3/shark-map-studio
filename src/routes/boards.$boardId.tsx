@@ -213,11 +213,14 @@ function BoardCanvas() {
           </div>
           <div className="flex-1 overflow-y-auto p-3">
             {filteredCategories.map((cat) => (
-              <div key={cat.name} className="mb-4">
-                <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  {cat.name}
+              <div key={cat.name} className="mb-5">
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                    {cat.name}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground/70">{cat.items.length}</div>
                 </div>
-                <div className="space-y-1">
+                <div className="grid grid-cols-2 gap-1.5">
                   {cat.items.map((item) => (
                     <div
                       key={item.label}
@@ -228,15 +231,25 @@ function BoardCanvas() {
                           category: cat.name,
                           subtype: item.subtype,
                           color: item.color,
+                          icon: item.icon,
+                          lucide: item.lucide,
                         })
                       }
-                      className="group flex cursor-grab items-center gap-2 rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs transition-all hover:border-primary/50 active:cursor-grabbing"
+                      title={item.label}
+                      className="group flex cursor-grab flex-col items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-2 py-2.5 text-[10px] transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_4px_14px_-6px_rgba(96,165,250,0.5)] active:cursor-grabbing"
                     >
-                      <span
-                        className="h-1.5 w-1.5 rounded-full"
-                        style={{ background: item.color ?? "var(--primary)" }}
-                      />
-                      <span>{item.label}</span>
+                      <div
+                        className="flex h-7 w-7 items-center justify-center rounded-lg border"
+                        style={{
+                          background: `color-mix(in oklab, ${item.color ?? "#60a5fa"} 14%, var(--card))`,
+                          borderColor: `color-mix(in oklab, ${item.color ?? "#60a5fa"} 35%, transparent)`,
+                        }}
+                      >
+                        <BlockIcon icon={item.icon} lucide={item.lucide} color={item.color ?? "#60a5fa"} size={16} />
+                      </div>
+                      <span className="line-clamp-1 text-center text-[10px] text-foreground/90">
+                        {item.label}
+                      </span>
                     </div>
                   ))}
                 </div>
