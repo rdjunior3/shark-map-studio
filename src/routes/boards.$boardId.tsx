@@ -20,7 +20,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, Save, Trash2, Copy, Search } from "lucide-react";
 import { useAppStore, BOARD_TYPE_LABEL, type NodeBlockData } from "@/lib/store";
 import { BLOCK_CATEGORIES } from "@/lib/blocks";
-import { BlockNode } from "@/components/BlockNode";
+import { BlockNode, BlockIcon } from "@/components/BlockNode";
 
 export const Route = createFileRoute("/boards/$boardId")({
   component: BoardCanvasPage,
