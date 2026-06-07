@@ -121,7 +121,7 @@ function BoardCanvas() {
     setNodes((nds) => [...nds, newNode]);
   };
 
-  const onDragStart = (e: React.DragEvent, payload: { label: string; category: string; subtype?: string; color?: string }) => {
+  const onDragStart = (e: React.DragEvent, payload: { label: string; category: string; subtype?: string; color?: string; icon?: string; lucide?: string }) => {
     e.dataTransfer.setData("application/json", JSON.stringify(payload));
     e.dataTransfer.effectAllowed = "move";
   };
