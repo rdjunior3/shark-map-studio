@@ -161,7 +161,7 @@ export const useAppStore = create<State>()(
         }),
     }),
     {
-      name: "sharks-flow-store-v2",
+      name: "sharks-flow-store-v3",
       storage: createJSONStorage(() =>
         typeof window !== "undefined" ? window.localStorage : (undefined as unknown as Storage),
       ),
